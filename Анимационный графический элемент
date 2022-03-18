@@ -1,0 +1,67 @@
+// Таймер активности (пульсирования) 
+private Timer timerActive = new Timer();
+
+// Таймер исчезновения
+private Timer timerVanish = new Timer();
+
+// Изменения размера сторон геометрического элемента 
+// при пульсации и исчезновении.
+private int deltaSize = 0;
+
+/// <summary>
+/// Координаты графэлемента.
+/// </summary>
+public Rectangle CellCoordinate;
+
+
+int k = 1;
+/// <summary>
+/// Таймер активности периодически увеличивает и
+/// уменьшает геометрическую фигуру,
+/// создавая эффект активности.
+/// </summary>
+void TimerActive_Tick(object sender, EventArgs e)
+{
+    deltaSize += 1 * k;
+
+    // Цикл уменьшения и увеличения размера
+    // геометрической фигуры при пульсировании.
+    if (deltaSize >= -2)
+    {
+                k = -1;
+    }
+    else if (deltaSize <= -7)
+    {
+        k = 1;
+    }
+    
+    // Для экономии процессорных ресурсов
+    // обновляем только прямоугольник 
+    // графического элемента.
+    Parent.Invalidate(CellCoordinate);
+}
+
+/// <summary>
+/// Таймер исчезания, сначала графэлемент уменьшается,
+/// а потом исчезает.
+/// </summary>
+void TimerVanish_Tick(object sender, EventArgs e)
+{
+    deltaSize += -2;
+
+    if (deltaSize < -14)
+    {
+       timerVanish.Enabled = false;
+       visible = false;
+       vanish = false;
+
+       // После того как геометрическая фигура стала невидимой,
+       // возвращаем ей нормальные размеры.
+       deltaSize = inflateSize;
+    }
+
+    // Для экономии процессорных ресурсов
+    // обновляем только прямоугольник 
+    // графического элемента.
+    Parent.Invalidate(CellCoordinate);
+}
